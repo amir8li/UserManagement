@@ -33,4 +33,28 @@ app.MapPost("user/Create", async (IUserService userService, UserCreateParams dto
     return Results.Ok(result);
 });
 
+app.MapGet("user/Read", async (IUserService userService) =>
+{
+    var result = await userService.Read();
+    return Results.Ok(result);
+});
+
+app.MapGet("user/Read/{id:guid}", async (IUserService userService, Guid id) =>
+{
+    var result = await userService.ReadById(id);
+    return result == null ? Results.NotFound() : Results.Ok(result);
+});
+
+app.MapPut("user/Update", async (IUserService userService, UserUpdateParams param) =>
+{
+    var result = await userService.Update(param);
+    return result == null ? Results.NotFound() : Results.Ok(result);
+});
+
+app.MapDelete("user/Delete", async (IUserService userService, Guid id) =>
+{
+    await userService.Delete(id);
+    return Results.Ok();
+});
+
 app.Run();

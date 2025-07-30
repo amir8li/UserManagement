@@ -22,12 +22,24 @@ public class UserCreateParams
     public bool IsMarried { get; set; } = false;
 }
 
+public class UserUpdateParams
+{    
+    [Required] 
+    public required Guid Id { get; set; }
+    public string? FullName { get; set; }
+    public  string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public DateTime? Birthdate { get; set; }
+    public bool? IsMarried { get; set; }
+}
+
 public class UserResponse
 {
+    public required Guid Id { get; set; }
     public required string FullName { get; set; }
     public required string Email { get; set; }
     public required string PhoneNumber { get; set; }
     public DateTime? Birthdate { get; set; }
-    public bool IsMarried { get; set; } = false;  
+    public bool IsMarried { get; set; }
     public int? Age { get; set; }
 }
