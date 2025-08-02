@@ -17,6 +17,12 @@ public class UserService(AppDbContext dbContext) : IUserService
 {
     public async Task<UserResponse> Create(UserCreateParams dto)
     {
+        List<ClassEntity> classList = [];
+        foreach (var clssId in dto.Classes)
+        {
+            ClassEntity? classEntity = await dbContext.Class.FindAsync(clssId);
+            classList.Add(classEntity);
+        }
         UserEntity user = new()
         {
             Id = Guid.CreateVersion7(),
@@ -24,7 +30,8 @@ public class UserService(AppDbContext dbContext) : IUserService
             Email = dto.Email,
             PhoneNumber = dto.PhoneNumber,
             Birthdate = dto.Birthdate,
-            IsMarried = dto.IsMarried
+            IsMarried = dto.IsMarried,
+            Classes = classList
         };
         var entity = dbContext.Users.Add(user).Entity;
         await dbContext.SaveChangesAsync();
@@ -50,7 +57,7 @@ public class UserService(AppDbContext dbContext) : IUserService
     public async Task<IEnumerable<UserResponse>> Read()
     {
         var list = await dbContext.Users
-            .AsNoTracking()
+            .AsNoTracking().Include(userEntity => userEntity.Classes)
             .ToListAsync();
 
         var response = list.Select(user =>
@@ -69,7 +76,8 @@ public class UserService(AppDbContext dbContext) : IUserService
                 PhoneNumber = user.PhoneNumber,
                 Birthdate = user.Birthdate,
                 IsMarried = user.IsMarried,
-                Age = age
+                Age = age,
+                Classes = user.Classes.ToList()
             };
         });
 

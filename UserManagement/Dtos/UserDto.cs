@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using UserManagement.Entities;
 
 namespace UserManagement.Dtos;
 
@@ -20,6 +21,9 @@ public class UserCreateParams
     public DateTime? Birthdate { get; set; }
 
     public bool IsMarried { get; set; } = false;
+    
+    public IEnumerable<Guid> Classes { get; set; }
+
 }
 
 public class UserUpdateParams
@@ -42,4 +46,5 @@ public class UserResponse
     public DateTime? Birthdate { get; set; }
     public bool IsMarried { get; set; }
     public int? Age { get; set; }
+    public List<ClassEntity>? Classes { get; set; }
 }

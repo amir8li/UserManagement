@@ -26,5 +26,5 @@ public class UserEntity
 
     public bool IsMarried { get; set; } = false;
 
-    public IEnumerable<ClassEntity> Classes { get; set; }
+    public IEnumerable<ClassEntity>? Classes { get; set; }
 }
