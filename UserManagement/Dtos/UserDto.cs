@@ -24,6 +24,8 @@ public class UserCreateParams
     
     public IEnumerable<Guid> Classes { get; set; }
 
+    public required string Password { get; set; }
+
 }
 
 public class UserUpdateParams

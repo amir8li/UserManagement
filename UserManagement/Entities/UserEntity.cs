@@ -21,6 +21,8 @@ public class UserEntity
     [MaxLength(12)]
     [MinLength(10)]
     public required string PhoneNumber { get; set; }
+
+    public required string Password { get; set; }
     
     public DateTime? Birthdate { get; set; }
 

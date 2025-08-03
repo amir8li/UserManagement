@@ -11,9 +11,11 @@ public interface IUserService
     Task<UserResponse?> ReadById(Guid id);
     Task<UserResponse?> Update(UserUpdateParams param);
     Task Delete(Guid id);   
+    
+    Task<UserResponse?> GetProfile();
 }
 
-public class UserService(AppDbContext dbContext) : IUserService
+public class UserService(AppDbContext dbContext, IHttpContextAccessor httpContext) : IUserService
 {
     public async Task<UserResponse> Create(UserCreateParams dto)
     {
@@ -31,7 +33,8 @@ public class UserService(AppDbContext dbContext) : IUserService
             PhoneNumber = dto.PhoneNumber,
             Birthdate = dto.Birthdate,
             IsMarried = dto.IsMarried,
-            Classes = classList
+            Classes = classList,
+            Password = "123456789"
         };
         var entity = dbContext.Users.Add(user).Entity;
         await dbContext.SaveChangesAsync();
@@ -146,5 +149,13 @@ public class UserService(AppDbContext dbContext) : IUserService
         dbContext.Users.Remove(user);
         await dbContext.SaveChangesAsync();
         // await dbContext.Users.Where(user => user.Id == id).ExecuteDeleteAsync(); 
+    }
+
+    public async Task<UserResponse?> GetProfile()
+    {
+        string userId = httpContext.HttpContext.User.Identity.Name;
+        if(userId == null) return null;
+        UserResponse? response = await ReadById(Guid.Parse(userId));
+        return response ?? null;
     }
 }
